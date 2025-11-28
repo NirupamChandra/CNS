@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiffeHellMan</title>
+</head>
+<body>
+    
+    <label>Enter prime value : </label>
+    <input id="p" type="text" placeholder="ENter Prime"><br><br>
+    
+    <label>Enter base value : </label>
+    <input type="text" id="g" placeholder="Enter base"><br><br>
+
+    <label> Enter Alice Private key : </label>
+    <input type="text" id="a" placeholder="Enter alice value"><br><br>
+
+    <label>Enter Bob private key : </label>
+    <input type="text" id="b" placeholder="Enter Bob Value"><br><br>
+
+    <button onclick="runDHM()" id="btn">Submit</button>
+
+    <pre id="output"></pre>
+
+
+    <script>
+
+        function powmod(base, exp, mod){
+            let result = 1n;
+            base = base % mod;
+
+            for(let i=0n; i<exp; i++){
+                result = (result * base) % mod;
+            }
+            return result;
+
+        }
+
+        function runDHM(){
+            
+            let p = BigInt(document.getElementById("p").value);
+            let g = BigInt(document.getElementById("g").value);
+            let a = BigInt(document.getElementById("a").value);
+            let b = BigInt(document.getElementById("b").value);
+
+            let out = "";
+
+            out += "Public Prime : " + p + "\n\n";
+            out += "Public Base : " + g + "\n\n";
+
+            out+= "Alice Private key : " + a +"\n" ;
+            out += "Bob Private Key : " + b + "\n";
+
+            const A = powmod(g, a, p);
+            const B = powmod(g, b, p);
+
+            out += "Alice public key : " + A + "\n";
+            out += "Bob Public Key : " + B + "\n";
+
+            const secretAlice = powmod(B, a, p);
+            const secretBob = powmod(A, b, p);
+
+            out += "Alice shared secret key : " + secretAlice + "\n";
+            out += "Bob shared secret Key : " + secretBob + "\n";
+
+            if (secretAlice === secretBob){
+                out += "Successful Exchange!!";
+            }else{
+                out += "Failed here!!";
+            }
+
+            document.getElementById("output").innerText = out;
+        }
+    </script>
+
+</body>
+</html>
